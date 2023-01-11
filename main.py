@@ -10,8 +10,7 @@ def main():
         resp.encoding = 'utf-8' # 使用与网页相对应的编码格式, 避免乱码
         soup = BeautifulSoup(resp.text, 'html.parser') # 通过html dom解析器采集数据
         
-        ret = soup.find('div', id='bankDiv')
-        items = ret.select('tr')
+        items = soup.select('#bankDiv tr')
         
         type_bgcolor_maps = { # 类型与色码映射
             '#ecc8da': "銀行", 
@@ -23,7 +22,7 @@ def main():
         data = []
         for index in range(len(items)): # 通过索引遍历
             if index == 0: continue # 第1行为栏目略过
-            tds         = items[index].find_all('td')
+            tds         = items[index].select('td')
             
             for td_index in range(0, len(tds), 2): # 从0开始, 增量2, 所以会生成0, 2, 4, 6
                 bank_id     = tds[td_index].get_text(strip=True) # 代号, strip干掉字符串首尾空白
